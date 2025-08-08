@@ -36,6 +36,10 @@ func Execute() error {
 }
 
 func init() {
+	// Suppress unused variable warnings for build-time variables
+	_ = commit
+	_ = date
+	
 	// Global flags
 	rootCmd.PersistentFlags().BoolVar(&dryRun, "dry-run", false, "show what would be done without making changes")
 	rootCmd.PersistentFlags().BoolVarP(&force, "force", "f", false, "force replacement of conflicting files")
