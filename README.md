@@ -1,5 +1,7 @@
 # Agentlink
 
+[![Checks](https://github.com/martinmose/agentlink/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/martinmose/agentlink/actions/workflows/ci.yml)
+
 Keep your AI instruction files in sync with **zero magic** — just symlinks.
 
 Different tools want different files at project root: `AGENTS.md` (OpenAI/Codex, OpenCode), `CLAUDE.md` (Claude Code), `GEMINI.md`, etc. There's no standard, and I'm not waiting for one. **Agentlink** solves the basic need: keep your **personal** instruction files (in `~`) and your **project** instruction files in sync **without generators**. Edit one, they all reflect it.
