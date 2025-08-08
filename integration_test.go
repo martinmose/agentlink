@@ -1,3 +1,5 @@
+//go:build integration
+
 package main
 
 import (
@@ -31,16 +33,14 @@ func TestIntegrationBasicWorkflow(t *testing.T) {
 		t.Fatal(err)
 	}
 	
-	// Build the binary
-	binaryPath := filepath.Join(tmpDir, "agentlink")
-	cmd := exec.Command("go", "build", "-o", binaryPath, filepath.Join(origDir, "cmd", "agentlink"))
-	cmd.Dir = origDir
-	if err := cmd.Run(); err != nil {
-		t.Fatalf("Failed to build binary: %v", err)
+	// Use the pre-built binary
+	binaryPath := filepath.Join(origDir, "agentlink")
+	if _, err := os.Stat(binaryPath); err != nil {
+		t.Fatalf("Binary not found at %s. Make sure to run 'go build -o agentlink ./cmd/agentlink' first", binaryPath)
 	}
 	
 	// Test 1: Init command
-	cmd = exec.Command(binaryPath, "init")
+	cmd := exec.Command(binaryPath, "init")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("Init failed: %v\nOutput: %s", err, output)
@@ -142,16 +142,18 @@ func TestIntegrationDoctorCommand(t *testing.T) {
 		t.Skip("Skipping integration test in short mode")
 	}
 	
-	// Build the binary
-	tmpDir := t.TempDir()
-	binaryPath := filepath.Join(tmpDir, "agentlink")
-	cmd := exec.Command("go", "build", "-o", binaryPath, "cmd/agentlink")
-	if err := cmd.Run(); err != nil {
-		t.Fatalf("Failed to build binary: %v", err)
+	// Use the pre-built binary
+	origDir, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+	}
+	binaryPath := filepath.Join(origDir, "agentlink")
+	if _, err := os.Stat(binaryPath); err != nil {
+		t.Fatalf("Binary not found at %s. Make sure to run 'go build -o agentlink ./cmd/agentlink' first", binaryPath)
 	}
 	
 	// Run doctor command
-	cmd = exec.Command(binaryPath, "doctor")
+	cmd := exec.Command(binaryPath, "doctor")
 	output, _ := cmd.CombinedOutput()
 	// Doctor might return non-zero exit code if there are warnings, but that's OK
 	
@@ -190,18 +192,16 @@ func TestIntegrationForceFlag(t *testing.T) {
 		t.Fatal(err)
 	}
 	
-	// Build the binary
-	binaryPath := filepath.Join(tmpDir, "agentlink")
-	cmd := exec.Command("go", "build", "-o", binaryPath, filepath.Join(origDir, "cmd", "agentlink"))
-	cmd.Dir = origDir
-	if err := cmd.Run(); err != nil {
-		t.Fatalf("Failed to build binary: %v", err)
+	// Use the pre-built binary
+	binaryPath := filepath.Join(origDir, "agentlink")
+	if _, err := os.Stat(binaryPath); err != nil {
+		t.Fatalf("Binary not found at %s. Make sure to run 'go build -o agentlink ./cmd/agentlink' first", binaryPath)
 	}
 	
 	// Create .git and initialize project
 	os.Mkdir(".git", 0755)
 	
-	cmd = exec.Command(binaryPath, "init")
+	cmd := exec.Command(binaryPath, "init")
 	if err := cmd.Run(); err != nil {
 		t.Fatal(err)
 	}
