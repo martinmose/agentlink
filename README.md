@@ -164,7 +164,26 @@ links:
 ## Platform notes
 
 - **macOS + Linux**: standard POSIX symlinks (`ln -s`) — works the same.
-- **Git**: symlinks are stored as links (not file copies). That’s fine; teams who dislike that can add them to `.gitignore`.
+- **Git**: symlinks are stored as links (not file copies). That's fine; teams who dislike that can add them to `.gitignore`.
+
+### Gitignore patterns
+
+Since agentlink creates multiple instruction files but only one is the real source, you can gitignore all AI instruction files except your chosen source:
+
+```gitignore
+# Ignore all AI instruction files
+AGENTS.md
+CLAUDE.md  
+GEMINI.md
+OPENCODE.md
+.cursorrules
+.github/copilot-instructions.md
+
+# But track your chosen source file (example: tracking CLAUDE.md)
+!CLAUDE.md
+```
+
+This keeps your repository clean while ensuring your source file is version controlled. Agentlink will create the source file if it doesn't exist when running `sync`.
 - **Editors/IDEs**: most follow symlinks transparently.
 
 ---
